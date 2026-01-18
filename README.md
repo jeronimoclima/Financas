@@ -55,7 +55,9 @@ Um gerenciador de pacotes: npm
 
 3.Executar a aplicação = npm run dev
 
-4.Api deve estar rodando simuntaniamente com o front
+4.Api (https://github.com/jeronimoclima/ApiControleFinancas.git) deve estar rodando simuntaniamente com o front
+
+
 
 
 
