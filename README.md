@@ -38,7 +38,6 @@ Serviço de API centralizado, facilitando manutenção e evolução
 
 Controle de rotas, garantindo navegação fluida
 
-
 Pré-requisitos
 
 Antes de iniciar, é necessário ter instalado:
@@ -47,9 +46,7 @@ Node.js
 
 Git
 
-Um gerenciador de pacotes:
-
-npm
+Um gerenciador de pacotes: npm
 
 
 1.Clonar o repositório = git clone https://github.com/jeronimoclima/Financas.git
