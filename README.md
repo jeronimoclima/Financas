@@ -49,13 +49,15 @@ Git
 
 Um gerenciador de pacotes:
 
-npm (já vem com o Node.js) ou
+npm
 
-yarn
 
 1.Clonar o repositório = git clone https://github.com/jeronimoclima/Financas.git
+
 2.Instalar as dependências = npm install
-3.Executar a aplicação = npm run dev 
+
+3.Executar a aplicação = npm run dev
+
 4.Api deve estar rodando simuntaniamente com o front
 
 
