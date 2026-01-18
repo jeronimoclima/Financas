@@ -116,7 +116,7 @@ export const Categorias = () => {
                   </div>
                 </div>
 
-                {/* BOTÃO DE DELETAR: Agora o Trash2 é usado e o erro some! */}
+              
                 <button 
                   onClick={() => handleDeletar(cat.id)}
                   className="p-2 text-slate-300 hover:text-rose-500 transition-all opacity-0 group-hover:opacity-100"

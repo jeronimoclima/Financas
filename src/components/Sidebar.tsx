@@ -10,7 +10,6 @@ export const Sidebar = () => {
     { name: 'Pessoas', path: '/pessoas', icon: Users },
     { name: 'Categorias', path: '/categorias', icon: Tags },
     { name: 'Transações', path: '/transacoes', icon: ReceiptText },
-   
     { name: 'Consulta Totais', path: '/totais', icon: BarChart3 },
   ];
 

@@ -8,6 +8,7 @@ export const ConsultaTotais = () => {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -28,7 +29,7 @@ export const ConsultaTotais = () => {
     carregarDados();
   }, []);
 
-  // Cálculo por Pessoa (Individual)
+   {/* calculo por pessoa */}
   const totaisPorPessoa = useMemo(() => {
     return pessoas.map(pessoa => {
       const transacoesDaPessoa = transacoes.filter(t => t.pessoa?.id === pessoa.id);
@@ -50,14 +51,24 @@ export const ConsultaTotais = () => {
     });
   }, [pessoas, transacoes]);
 
-  //  Cálculo Geral (Rodapé)
+
+  const totaisFiltrados = useMemo(() => {
+  if (!search.trim()) return totaisPorPessoa;
+
+  return totaisPorPessoa.filter(p =>
+    p.nome.toLowerCase().includes(search.toLowerCase())
+  );
+}, [search, totaisPorPessoa]);
+
+  {/* cauculo no rodape */}
   const totalGeral = useMemo(() => {
-    return totaisPorPessoa.reduce((acc, p) => ({
-      receitas: acc.receitas + p.receitas,
-      despesas: acc.despesas + p.despesas,
-      saldo: acc.saldo + p.saldo
-    }), { receitas: 0, despesas: 0, saldo: 0 });
-  }, [totaisPorPessoa]);
+  return totaisFiltrados.reduce((acc, p) => ({
+    receitas: acc.receitas + p.receitas,
+    despesas: acc.despesas + p.despesas,
+    saldo: acc.saldo + p.saldo
+  }), { receitas: 0, despesas: 0, saldo: 0 });
+}, [totaisFiltrados]);
+
 
   if (loading) return (
     <div className="flex h-screen items-center justify-center ml-72">
@@ -69,9 +80,19 @@ export const ConsultaTotais = () => {
     <div className="p-8 md:p-12 ml-72 min-h-screen bg-[#F8FAFC]">
       <div className="max-w-6xl mx-auto">
         <header className="mb-10">
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight italic">Relatório por Morador</h1>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight italic">Relatório por pessoa</h1>
           <p className="text-slate-500 font-medium italic">Resumo consolidado de receitas e gastos individuais.</p>
         </header>
+
+        <div className="mb-8">
+          <input
+               type="text"
+                placeholder="Buscar por nome..."
+                 value={search}
+                 onChange={(e) => setSearch(e.target.value)}
+                 className="w-full md:w-96 p-4 rounded-2xl border-2 border-slate-200 focus:border-blue-500 outline-none font-semibold"
+             />
+         </div>
 
         {/* Tabela de Totais */}
         <section className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
@@ -85,7 +106,18 @@ export const ConsultaTotais = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {totaisPorPessoa.map(p => (
+         
+            {totaisFiltrados.length === 0 && (
+               <tr>
+               <td colSpan={4} className="p-10 text-center text-slate-400 italic">
+                    Nenhuma pessoa encontrada.
+               </td>
+               </tr>
+              )}
+
+               {/* filtra por pessoa */}
+              {totaisFiltrados.map(p => (
+
                 <tr key={p.id} className="hover:bg-slate-50/30 transition-colors group">
                   <td className="p-6">
                     <div className="flex items-center gap-3">

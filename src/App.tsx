@@ -4,7 +4,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Pessoas } from './pages/Pessoas';
 import { Transacoes } from './pages/Transacoes';
 import { Categorias } from './pages/Categorias'; 
-import { ConsultaTotais } from './pages/ConsultaTotais'; // 1. IMPORTAR A NOVA PÁGINA
+import { ConsultaTotais } from './pages/ConsultaTotais'; 
 
 export default function App() {
   return (

@@ -85,21 +85,24 @@ export const Transacoes = () => {
         <form onSubmit={handleSalvar} className="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             
-            {/* Descrição */}
+            
+            {/* Pessoa */}
             <div className="space-y-2">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">O que é?</label>
-              <input 
+              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Quem?</label>
+              <select 
                 required
-                value={formData.descricao}
-                onChange={e => setFormData({...formData, descricao: e.target.value})}
-                className="w-full p-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all"
-                placeholder="Ex: Compras do mês" 
-              />
+                value={formData.idPessoa}
+                onChange={e => setFormData({...formData, idPessoa: e.target.value})}
+                className="w-full p-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all cursor-pointer"
+              >
+                <option value="">Selecione o morador</option>
+                {pessoas.map(p => <option key={p.id} value={p.id}>{p.nome}</option>)}
+              </select>
             </div>
 
-           
+            {/* Valor */}
             <div className="space-y-2">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Quanto?</label>
+              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Valor?</label>
               <div className="relative">
                 <span className="absolute left-4 top-4 font-bold text-slate-400">R$</span>
                 <input 
@@ -114,7 +117,7 @@ export const Transacoes = () => {
               </div>
             </div>
 
-        
+            {/* Tipo */}
             <div className="md:col-span-2 space-y-2">
               <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tipo</label>
               <div className="flex gap-4">
@@ -134,19 +137,17 @@ export const Transacoes = () => {
                 </button>
               </div>
             </div>
-
-            {/* Pessoa */}
+            
+            {/* Descrição */}
             <div className="space-y-2">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Quem?</label>
-              <select 
+              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">O que é?</label>
+              <input 
                 required
-                value={formData.idPessoa}
-                onChange={e => setFormData({...formData, idPessoa: e.target.value})}
-                className="w-full p-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all cursor-pointer"
-              >
-                <option value="">Selecione o morador</option>
-                {pessoas.map(p => <option key={p.id} value={p.id}>{p.nome}</option>)}
-              </select>
+                value={formData.descricao}
+                onChange={e => setFormData({...formData, descricao: e.target.value})}
+                className="w-full p-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all"
+                placeholder="Ex: Compras do mês" 
+              />
             </div>
 
             {/* Categoria */}
@@ -165,8 +166,8 @@ export const Transacoes = () => {
           </div>
 
           <button 
-            disabled={loading}
-            className="w-full py-5 bg-slate-900 hover:bg-blue-600 text-white rounded-3xl font-black text-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50">
+          disabled={loading}
+          className="w-full py-5 bg-slate-900 hover:bg-blue-600 text-white rounded-3xl font-black text-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50">
           {loading ? (<Loader2 className="animate-spin" size={24} />) : (<>
           <CheckCircle2 size={24}/> 
            <span>Confirmar Lançamento</span>
