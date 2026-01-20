@@ -1,73 +1,65 @@
-# React + TypeScript + Vite
+Sistema de Controle Financeiro
+Descrição do Projeto
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Esta aplicação tem como objetivo realizar o controle financeiro básico, permitindo o gerenciamento de pessoas, categorias, transações financeiras e a consulta de totais.
+Ela foi desenvolvida para facilitar o acompanhamento de entradas e saídas, oferecendo uma visão organizada e centralizada das informações financeiras.
 
-Currently, two official plugins are available:
+O projeto é ideal para fins de aprendizado, uso pessoal ou como base para aplicações financeiras maiores, utilizando boas práticas de desenvolvimento frontend e integração com API.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Para que serve esta aplicação?
 
-## React Compiler
+A aplicação permite:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+ Cadastro e gerenciamento de Pessoas
 
-## Expanding the ESLint configuration
+ Cadastro de Categorias financeiras
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+ Registro de Transações (entradas e saídas)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+ Consulta de totais financeiros, com filtros por nome
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+ Navegação intuitiva por meio de um Sidebar
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Comunicação com uma API centralizada
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Com isso, o usuário consegue ter controle e organização financeira, visualizando dados de forma clara e estruturada.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+ Estrutura Geral da Aplicação
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+A aplicação é composta por:
+
+React + TypeScript para a interface
+
+Componentes reutilizáveis, como o Sidebar
+
+Páginas organizadas por funcionalidade
+
+Serviço de API centralizado, facilitando manutenção e evolução
+
+Controle de rotas, garantindo navegação fluida
+
+Pré-requisitos
+
+Antes de iniciar, é necessário ter instalado:
+
+Node.js 
+
+Git
+
+Um gerenciador de pacotes: npm
+
+
+1.Clonar o repositório = git clone https://github.com/jeronimoclima/Financas.git
+
+2.Instalar as dependências = npm install
+
+3.Executar a aplicação = npm run dev
+
+4.Api (https://github.com/jeronimoclima/ApiControleFinancas.git) deve estar rodando simuntaniamente com o front
+
+
+
+
+
+
 ```
