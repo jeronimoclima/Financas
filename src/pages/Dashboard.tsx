@@ -10,14 +10,20 @@ import {
 } from "lucide-react";
 import type { ResponseModel } from "../types";
 
-interface Transacao {
+export interface Transacao {
   id: number;
   descricao: string;
   valor: number;
-  tipo: string;
-  data: string;
-  categoriaNome?: string;
-  pessoaNome?: string;
+  tipo: number | "Receita" | "Despesa";
+  pessoa: {
+    id: number;
+    nome: string;
+    idade: number;
+  };
+  categoria: {
+    id: number;
+    descricao: string;
+  };
 }
 
 export const Dashboard = () => {
@@ -151,13 +157,23 @@ export const Dashboard = () => {
                     className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors group"
                   >
                     <td className="p-6">
-                      <div className="flex flex-col">
+                      <div className="flex flex-col gap-1">
+                        {/* Descrição da transação */}
                         <span className="font-bold text-slate-700">
                           {t.descricao}
                         </span>
+
+                        {/* Categoria */}
                         <span className="text-xs text-slate-400">
-                          {t.categoriaNome || ""}
+                          {t.categoria.descricao}
                         </span>
+
+                        {/* Pessoa responsável */}
+                        {t.pessoa?.nome && (
+                          <span className="text-[11px] text-slate-500 italic">
+                            {t.pessoa.nome}
+                          </span>
+                        )}
                       </div>
                     </td>
 

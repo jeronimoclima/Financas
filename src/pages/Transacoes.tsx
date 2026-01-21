@@ -45,7 +45,7 @@ export const Transacoes = () => {
 
     setTimeout(() => {
       setFlashMessage(null);
-    }, 1500);
+    }, 2000);
   };
 
   const handleSalvar = async (e: React.FormEvent) => {
@@ -118,11 +118,8 @@ export const Transacoes = () => {
   return (
     <div className="ml-72 p-12 min-h-screen bg-[#f8fafc] animate-in fade-in duration-500">
       {flashMessage && (
-        <div className="fixed inset-0 z-9999 flex items-center justify-center">
-          {/* FUNDO */}
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-
-          {/* CAIXA */}
+        <div className="fixed inset-0 z-9999 flex items-center justify-center">       
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />         
           <div
             className={`relative px-10 py-6 rounded-3xl text-white text-lg font-bold shadow-2xl
           animate-in zoom-in-95 fade-in duration-300

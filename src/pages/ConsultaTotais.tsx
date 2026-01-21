@@ -113,7 +113,7 @@ export const ConsultaTotais = () => {
       <div className="max-w-6xl mx-auto">
         <header className="mb-10">
           <h1 className="text-4xl font-black text-slate-900 tracking-tight italic">
-            Relatório por pessoa
+            Relatório por moradores
           </h1>
           <p className="text-slate-500 font-medium italic">
             Resumo consolidado de receitas e gastos individuais.
