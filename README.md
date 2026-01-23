@@ -1,65 +1,69 @@
 Sistema de Controle Financeiro
-Descrição do Projeto
+Descrição
 
-Esta aplicação tem como objetivo realizar o controle financeiro básico, permitindo o gerenciamento de pessoas, categorias, transações financeiras e a consulta de totais.
-Ela foi desenvolvida para facilitar o acompanhamento de entradas e saídas, oferecendo uma visão organizada e centralizada das informações financeiras.
+Aplicação frontend para controle financeiro básico, permitindo o cadastro de pessoas, categorias e transações financeiras, além da visualização de totais.
 
-O projeto é ideal para fins de aprendizado, uso pessoal ou como base para aplicações financeiras maiores, utilizando boas práticas de desenvolvimento frontend e integração com API.
+O sistema foi desenvolvido como projeto prático para estudo e consolidação de conceitos de React, TypeScript e integração com API, simulando um cenário real de controle financeiro doméstico.
 
-Para que serve esta aplicação?
+Funcionalidades
 
-A aplicação permite:
+Cadastro e gerenciamento de pessoas
 
- Cadastro e gerenciamento de Pessoas
+Cadastro de categorias financeiras
 
- Cadastro de Categorias financeiras
+Registro de transações (receitas e despesas)
 
- Registro de Transações (entradas e saídas)
+Consulta de totais financeiros com filtro por nome
 
- Consulta de totais financeiros, com filtros por nome
+Navegação por sidebar
 
- Navegação intuitiva por meio de um Sidebar
+Integração com API REST
 
-Comunicação com uma API centralizada
+Estrutura da Aplicação
 
-Com isso, o usuário consegue ter controle e organização financeira, visualizando dados de forma clara e estruturada.
+React + TypeScript
 
- Estrutura Geral da Aplicação
+Componentes reutilizáveis (Sidebar, FlashMessage, etc.)
 
-A aplicação é composta por:
+Páginas separadas por funcionalidade
 
-React + TypeScript para a interface
+Serviço de API centralizado
 
-Componentes reutilizáveis, como o Sidebar
-
-Páginas organizadas por funcionalidade
-
-Serviço de API centralizado, facilitando manutenção e evolução
-
-Controle de rotas, garantindo navegação fluida
+Controle de rotas
 
 Pré-requisitos
 
 Antes de iniciar, é necessário ter instalado:
 
-Node.js 
+Node.js
 
 Git
 
-Um gerenciador de pacotes: npm
+npm
+
+Como executar o projeto
+
+Clonar o repositório:
+
+git clone https://github.com/jeronimoclima/Financas.git
 
 
-1.Clonar o repositório = git clone https://github.com/jeronimoclima/Financas.git
+Acessar a pasta do projeto:
 
-2.Instalar as dependências = npm install
-
-3.Executar a aplicação = npm run dev
-
-4.Api (https://github.com/jeronimoclima/ApiControleFinancas.git) deve estar rodando simuntaniamente com o front
+cd Financas
 
 
+Instalar as dependências:
+
+npm install
 
 
+Executar a aplicação:
 
+npm run dev
 
-```
+API
+
+Este frontend depende da API abaixo, que deve estar rodando simultaneamente:
+
+https://github.com/jeronimoclima/ApiControleFinancas.git

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 import { Tag, Plus, Loader2, Trash2 } from "lucide-react";
+import { FlashMessage } from "../components/FlashMessage"; //novo
 import type { Categoria, ResponseModel } from "../types";
 
 export const Categorias = () => {
@@ -39,7 +40,7 @@ export const Categorias = () => {
     }, 1500);
   };
 
-  const handleSalvar = async (e: React.FormEvent) => {
+  const SalvarCategoria = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!descricao) return;
 
@@ -65,7 +66,7 @@ export const Categorias = () => {
     }
   };
 
-  const handleDeletar = async (id: number) => {
+  const ApagarCategoria = async (id: number) => {
     if (!confirm("Deseja excluir esta categoria?")) return;
     try {
       await api.delete(`/Categoria/ExlcuirCategoria?id=${id}`); ///api/Categoria/ExlcuirCategoria
@@ -81,22 +82,9 @@ export const Categorias = () => {
 
   return (
     <div className="p-8 md:p-12 ml-72 min-h-screen bg-[#F8FAFC] animate-in fade-in duration-500">
-      {flashMessage && (
-        <div className="fixed inset-0 z-9999 flex items-center justify-center">
-          
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+      
 
-          
-          <div
-            className={`relative px-10 py-6 rounded-3xl text-white text-lg font-bold shadow-2xl
-        animate-in zoom-in-95 fade-in duration-300
-        ${flashType === "success" ? "bg-emerald-600" : "bg-rose-600"}
-      `}
-          >
-            {flashMessage}
-          </div>
-        </div>
-      )}
+      {flashMessage && <FlashMessage message={flashMessage} type={flashType} />}
 
       <div className="max-w-5xl mx-auto">
         <header className="mb-10">
@@ -110,7 +98,7 @@ export const Categorias = () => {
 
         <section className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white mb-12">
           <form
-            onSubmit={handleSalvar}
+            onSubmit={SalvarCategoria}
             className="flex flex-col md:flex-row gap-6 items-end"
           >
             <div className="flex-1 w-full">
@@ -180,7 +168,7 @@ export const Categorias = () => {
                 </div>
 
                 <button
-                  onClick={() => handleDeletar(cat.id)}
+                  onClick={() => ApagarCategoria(cat.id)}
                   className="p-2 text-slate-300 hover:text-rose-500 transition-all opacity-0 group-hover:opacity-100"
                 >
                   <Trash2 size={20} />

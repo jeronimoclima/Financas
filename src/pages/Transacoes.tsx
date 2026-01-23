@@ -7,12 +7,13 @@ import {
   CheckCircle2,
   Loader2,
 } from "lucide-react";
+import { FlashMessage } from "../components/FlashMessage"; //novo
 import type { Pessoa, Categoria, ResponseModel } from "../types";
 
 export const Transacoes = () => {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [salvandoTransacao, setSalvandoTransacao] = useState(false);
   const [flashMessage, setFlashMessage] = useState<string | null>(null);
   const [flashType, setFlashType] = useState<"success" | "error">("success");
 
@@ -23,6 +24,19 @@ export const Transacoes = () => {
     idPessoa: "",
     idCategoria: "",
   });
+
+  const pessoaAtual = pessoas.find((p) => p.id === Number(formData.idPessoa));
+
+  const pessoaMenorDeIdade = pessoaAtual ? pessoaAtual.idade < 18 : false;
+
+  useEffect(() => {
+    if (pessoaMenorDeIdade && formData.tipo === "Receita") {
+      setFormData((dadosAtuais) => ({
+        ...dadosAtuais,
+        tipo: "Despesa",
+      }));
+    }
+  }, [pessoaMenorDeIdade, formData.tipo]);
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -48,7 +62,7 @@ export const Transacoes = () => {
     }, 2000);
   };
 
-  const handleSalvar = async (e: React.FormEvent) => {
+  const SalvarTransacao = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Encontrar os dados da pessoa selecionada no formulário
@@ -69,7 +83,7 @@ export const Transacoes = () => {
       return;
     }
 
-    setLoading(true);
+    setSalvandoTransacao(true);
     try {
       await api.post("/Transacoes/CriarTransacao", {
         ...formData,
@@ -98,38 +112,13 @@ export const Transacoes = () => {
         );
       }
     } finally {
-      setLoading(false);
+      setSalvandoTransacao(false);
     }
   };
 
-  <button
-    disabled={loading}
-    className="w-full py-5 bg-slate-900 hover:bg-blue-600 text-white rounded-3xl font-black text-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-  >
-    {loading ? (
-      "Processando..."
-    ) : (
-      <>
-        <CheckCircle2 size={24} /> Confirmar Lançamento
-      </>
-    )}
-  </button>;
-
   return (
     <div className="ml-72 p-12 min-h-screen bg-[#f8fafc] animate-in fade-in duration-500">
-      {flashMessage && (
-        <div className="fixed inset-0 z-9999 flex items-center justify-center">       
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />         
-          <div
-            className={`relative px-10 py-6 rounded-3xl text-white text-lg font-bold shadow-2xl
-          animate-in zoom-in-95 fade-in duration-300
-          ${flashType === "success" ? "bg-emerald-600" : "bg-rose-600"}
-        `}
-          >
-            {flashMessage}
-          </div>
-        </div>
-      )}
+      {flashMessage && <FlashMessage message={flashMessage} type={flashType} />}
 
       <div className="max-w-4xl mx-auto">
         <header className="mb-10">
@@ -142,7 +131,7 @@ export const Transacoes = () => {
         </header>
 
         <form
-          onSubmit={handleSalvar}
+          onSubmit={SalvarTransacao}
           className="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 space-y-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -199,8 +188,17 @@ export const Transacoes = () => {
               <div className="flex gap-4">
                 <button
                   type="button"
+                  disabled={pessoaMenorDeIdade}
                   onClick={() => setFormData({ ...formData, tipo: "Receita" })}
-                  className={`flex-1 py-4 rounded-2xl border-2 flex items-center justify-center gap-2 font-bold transition-all ${formData.tipo === "Receita" ? "border-emerald-500 bg-emerald-50 text-emerald-600 shadow-inner" : "border-slate-100 text-slate-400"}`}
+                  className={`flex-1 py-4 rounded-2xl border-2 flex items-center justify-center gap-2 font-bold transition-all
+                        ${
+                          pessoaMenorDeIdade
+                            ? "border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed"
+                            : formData.tipo === "Receita"
+                              ? "border-emerald-500 bg-emerald-50 text-emerald-600 shadow-inner"
+                              : "border-slate-100 text-slate-400"
+                        }
+                         `}
                 >
                   <ArrowUpCircle size={20} /> Receita
                 </button>
@@ -255,10 +253,10 @@ export const Transacoes = () => {
           </div>
 
           <button
-            disabled={loading}
+            disabled={salvandoTransacao}
             className="w-full py-5 bg-slate-900 hover:bg-blue-600 text-white rounded-3xl font-black text-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50"
           >
-            {loading ? (
+            {salvandoTransacao ? (
               <Loader2 className="animate-spin" size={24} />
             ) : (
               <>

@@ -18,14 +18,24 @@ type PessoaComTotais = Pessoa & {
 export const ConsultaTotais = () => {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [carregando, setcarregando] = useState(true);
   const [search, setSearch] = useState("");
+
+  // calculo total por tipo
+  const calcularTotal = (
+    transacoes: Transacao[],
+    tipo: "Receita" | "Despesa" | number,
+  ) => {
+    return transacoes
+      .filter((transacao) => transacao.tipo === tipo)
+      .reduce((total, transacao) => total + transacao.valor, 0);
+  };
 
   useEffect(() => {
     const carregarDados = async () => {
       try {
         const [resPessoas, resTransacoes] = await Promise.all([
-          api.get<ResponseModel<Pessoa[]>>("/pessoa/BuscarPessoas"), ///api/pessoa/BuscarPessoas
+          api.get<ResponseModel<Pessoa[]>>("/pessoa/BuscarPessoas"), //api/pessoa/BuscarPessoas   colocado para nao esquecer
           api.get<ResponseModel<Transacao[]>>("/Transacoes/BuscarTodas"),
         ]);
 
@@ -35,26 +45,20 @@ export const ConsultaTotais = () => {
         if (axios.isAxiosError(err))
           console.error("Erro ao carregar totais:", err.message);
       } finally {
-        setLoading(false);
+        setcarregando(false);
       }
     };
     carregarDados();
   }, []);
 
-  {/* calculo por pessoa */}
+  // calculo por pessoa
   const totaisPorPessoa = useMemo<PessoaComTotais[]>(() => {
     return pessoas.map((pessoa) => {
       const transacoesDaPessoa = transacoes.filter(
         (t) => t.pessoa?.id === pessoa.id,
       );
-
-      const receitas = transacoesDaPessoa
-        .filter((t) => t.tipo === "Receita" || t.tipo === 2)
-        .reduce((acc, t) => acc + t.valor, 0);
-
-      const despesas = transacoesDaPessoa
-        .filter((t) => t.tipo === "Despesa" || t.tipo === 1)
-        .reduce((acc, t) => acc + t.valor, 0);
+      const receitas = calcularTotal(transacoesDaPessoa, "Receita");
+      const despesas = calcularTotal(transacoesDaPessoa, "Despesa");
 
       return {
         ...pessoa,
@@ -89,7 +93,7 @@ export const ConsultaTotais = () => {
     return transacoes.filter((t) => t.pessoa?.id === pessoaSelecionada.id);
   }, [pessoaSelecionada, transacoes]);
 
-  {  /* cauculo no rodape */ }
+  // cauculo no rodape
   const totalGeral = useMemo(() => {
     return totaisFiltrados.reduce(
       (acc, p) => ({
@@ -101,7 +105,7 @@ export const ConsultaTotais = () => {
     );
   }, [totaisFiltrados]);
 
-  if (loading)
+  if (carregando)
     return (
       <div className="flex h-screen items-center justify-center ml-72">
         <Loader2 className="animate-spin text-blue-600" size={40} />
@@ -116,7 +120,7 @@ export const ConsultaTotais = () => {
             Relatório por moradores
           </h1>
           <p className="text-slate-500 font-medium italic">
-            Resumo consolidado de receitas e gastos individuais.
+            Resumo de gastos individuais.
           </p>
         </header>
 
@@ -130,7 +134,6 @@ export const ConsultaTotais = () => {
           />
         </div>
 
-        {/*Resumo da pessoa selecionada */}
         {pessoaSelecionada && (
           <div className="bg-white p-6 rounded-3xl shadow-lg border border-slate-100 mb-8">
             <h2 className="text-xl font-black mb-4">
@@ -270,6 +273,7 @@ export const ConsultaTotais = () => {
                 </tr>
               ))}
             </tbody>
+
             {/* Rodapé com Totais Gerais */}
             <tfoot>
               <tr className="bg-slate-900 text-white">
@@ -297,7 +301,7 @@ export const ConsultaTotais = () => {
           </table>
         </section>
 
-        {/* Cards de Resumo Rápido  */}
+       
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <div className="bg-emerald-500 p-6 rounded-3xl text-white shadow-lg shadow-emerald-200">
             <ArrowUpCircle className="mb-2 opacity-50" />

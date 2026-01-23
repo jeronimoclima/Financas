@@ -37,7 +37,7 @@ export const Dashboard = () => {
     despesas: 0,
   });
 
-  const carregarEDash = useCallback(async () => {
+  const carregarDadosDashboard = useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get<ResponseModel<Transacao[]>>(
@@ -71,8 +71,8 @@ export const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    carregarEDash();
-  }, [carregarEDash]);
+    carregarDadosDashboard();
+  }, [carregarDadosDashboard]);
 
   if (loading) {
     return (
@@ -158,17 +158,14 @@ export const Dashboard = () => {
                   >
                     <td className="p-6">
                       <div className="flex flex-col gap-1">
-                        {/* Descrição da transação */}
                         <span className="font-bold text-slate-700">
                           {t.descricao}
                         </span>
 
-                        {/* Categoria */}
                         <span className="text-xs text-slate-400">
                           {t.categoria.descricao}
                         </span>
 
-                        {/* Pessoa responsável */}
                         {t.pessoa?.nome && (
                           <span className="text-[11px] text-slate-500 italic">
                             {t.pessoa.nome}
