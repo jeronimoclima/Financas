@@ -9,6 +9,8 @@ import {
   Loader2,
 } from "lucide-react";
 import type { ResponseModel } from "../types";
+import { GraficoDeResumoFinanceiro } from "../components/Grafico/GraficoDeResumoFinanceiro";
+import { GraficoDespesasPorCategoria } from "../components/Grafico/GraficoDespesasPorCategoria";
 
 export interface Transacao {
   id: number;
@@ -29,6 +31,7 @@ export interface Transacao {
 export const Dashboard = () => {
   const [transacoes, setTransacoes] = useState<Transacao[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mostrarTodas, setMostrarTodas] = useState(false);
 
   // Estados para os cálculos
   const [totais, setTotais] = useState({
@@ -73,6 +76,21 @@ export const Dashboard = () => {
   useEffect(() => {
     carregarDadosDashboard();
   }, [carregarDadosDashboard]);
+
+  const despesasPorCategoria = Object.entries(
+    transacoes
+      .filter((t) => t.tipo === "Despesa")
+      .reduce((acc: Record<string, number>, t) => {
+        const categoria = t.categoria.descricao;
+        acc[categoria] = (acc[categoria] || 0) + t.valor;
+        return acc;
+      }, {}),
+  ).map(([nome, valor]) => ({
+    nome,
+    valor,
+  }));
+
+  const transacoesExibidas = mostrarTodas ? transacoes : transacoes.slice(0, 3);
 
   if (loading) {
     return (
@@ -127,6 +145,16 @@ export const Dashboard = () => {
           </div>
         </div>
 
+        {/* Área de gráficos */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          <GraficoDeResumoFinanceiro
+            receitas={totais.receitas}
+            despesas={totais.despesas}
+          />
+
+          <GraficoDespesasPorCategoria dados={despesasPorCategoria} />
+        </div>
+
         {/* LLista de transações */}
         <section>
           <div className="flex items-center justify-between mb-6">
@@ -151,7 +179,7 @@ export const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {transacoes.map((t) => (
+                {transacoesExibidas.map((t) => (
                   <tr
                     key={t.id}
                     className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors group"
@@ -198,6 +226,25 @@ export const Dashboard = () => {
                 ))}
               </tbody>
             </table>
+
+            {transacoes.length > 3 && (
+              <div className="flex justify-center py-6">
+                <button
+                  onClick={() => setMostrarTodas(!mostrarTodas)}
+                  className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold text-slate-600 hover:text-blue-600 hover:bg-slate-100 transition"
+                >
+                  {mostrarTodas ? "Ocultar" : "Ver mais"}
+
+                  <span
+                    className={`transition-transform ${
+                      mostrarTodas ? "rotate-180" : ""
+                    }`}
+                  >
+                    ▼
+                  </span>
+                </button>
+              </div>
+            )}
 
             {transacoes.length === 0 && (
               <div className="p-20 text-center text-slate-400 italic">
