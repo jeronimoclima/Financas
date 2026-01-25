@@ -9,6 +9,7 @@ import {
   Loader2,
 } from "lucide-react";
 import type { Pessoa, Transacao, ResponseModel } from "../types";
+
 type PessoaComTotais = Pessoa & {
   receitas: number;
   despesas: number;
@@ -21,7 +22,9 @@ export const ConsultaTotais = () => {
   const [carregando, setcarregando] = useState(true);
   const [search, setSearch] = useState("");
 
-  // calculo total por tipo
+  const [dataInicio, setDataInicio] = useState("");
+  const [dataFim, setDataFim] = useState("");
+
   const calcularTotal = (
     transacoes: Transacao[],
     tipo: "Receita" | "Despesa" | number,
@@ -51,23 +54,38 @@ export const ConsultaTotais = () => {
     carregarDados();
   }, []);
 
-  // calculo por pessoa
-  const totaisPorPessoa = useMemo<PessoaComTotais[]>(() => {
-    return pessoas.map((pessoa) => {
-      const transacoesDaPessoa = transacoes.filter(
-        (t) => t.pessoa?.id === pessoa.id,
-      );
-      const receitas = calcularTotal(transacoesDaPessoa, "Receita");
-      const despesas = calcularTotal(transacoesDaPessoa, "Despesa");
 
-      return {
-        ...pessoa,
-        receitas,
-        despesas,
-        saldo: receitas - despesas,
-      };
-    });
-  }, [pessoas, transacoes]);
+const totaisPorPessoa = useMemo<PessoaComTotais[]>(() => {
+  return pessoas.map((pessoa) => {
+    const transacoesDaPessoa = transacoes
+      .filter((t) => t.pessoa?.id === pessoa.id)
+      .filter((t) => {
+        const data = new Date(t.dataTransacao).getTime();
+
+        const inicio = dataInicio
+          ? new Date(dataInicio + "T00:00:00Z").getTime()
+          : null;
+        const fim = dataFim
+          ? new Date(dataFim + "T23:59:59Z").getTime()
+          : null;
+
+        if (inicio !== null && data < inicio) return false;
+        if (fim !== null && data > fim) return false;
+
+        return true;
+      });
+
+    const receitas = calcularTotal(transacoesDaPessoa, "Receita");
+    const despesas = calcularTotal(transacoesDaPessoa, "Despesa");
+
+    return {
+      ...pessoa,
+      receitas,
+      despesas,
+      saldo: receitas - despesas,
+    };
+  });
+}, [pessoas, transacoes, dataInicio, dataFim]);
 
   const totaisFiltrados = useMemo(() => {
     if (!search.trim()) return totaisPorPessoa;
@@ -87,13 +105,29 @@ export const ConsultaTotais = () => {
     return filtrados.length === 1 ? filtrados[0] : null;
   }, [search, totaisPorPessoa]);
 
-  const transacoesDaPessoa = useMemo(() => {
-    if (!pessoaSelecionada) return [];
+const transacoesDaPessoa = useMemo(() => {
+  if (!pessoaSelecionada) return [];
 
-    return transacoes.filter((t) => t.pessoa?.id === pessoaSelecionada.id);
-  }, [pessoaSelecionada, transacoes]);
+  const inicio = dataInicio
+    ? new Date(dataInicio + "T00:00:00Z").getTime()
+    : null;
+  const fim = dataFim
+    ? new Date(dataFim + "T23:59:59Z").getTime()
+    : null;
 
-  // cauculo no rodape
+  return transacoes
+    .filter((t) => t.pessoa?.id === pessoaSelecionada.id)
+    .filter((t) => {
+      const data = new Date(t.dataTransacao).getTime();
+
+      if (inicio !== null && data < inicio) return false;
+      if (fim !== null && data > fim) return false;
+
+      return true;
+    });
+}, [pessoaSelecionada, transacoes, dataInicio, dataFim]);
+
+
   const totalGeral = useMemo(() => {
     return totaisFiltrados.reduce(
       (acc, p) => ({
@@ -104,6 +138,7 @@ export const ConsultaTotais = () => {
       { receitas: 0, despesas: 0, saldo: 0 },
     );
   }, [totaisFiltrados]);
+ 
 
   if (carregando)
     return (
@@ -124,13 +159,31 @@ export const ConsultaTotais = () => {
           </p>
         </header>
 
-        <div className="mb-8">
+      
+
+        <div className="flex flex-col md:flex-row gap-4 mb-8">          
           <input
             type="text"
             placeholder="Buscar por nome..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full md:w-96 p-4 rounded-2xl border-2 border-slate-200 focus:border-blue-500 outline-none font-semibold"
+          />
+
+        
+          <input
+            type="date"
+            value={dataInicio}
+            onChange={(e) => setDataInicio(e.target.value)}
+            className="w-full md:w-48 p-4 rounded-2xl border-2 border-slate-200 focus:border-blue-500 outline-none font-normal text-slate-400"
+          />
+
+         
+          <input
+            type="date"
+            value={dataFim}
+            onChange={(e) => setDataFim(e.target.value)}
+            className="w-full md:w-48 p-4 rounded-2xl border-2 border-slate-200 focus:border-blue-500 outline-none font-normal text-slate-400"
           />
         </div>
 
@@ -171,7 +224,7 @@ export const ConsultaTotais = () => {
           </div>
         )}
 
-        {/*Lista das transações da pessoa */}
+      
         {pessoaSelecionada && (
           <section className="bg-white p-6 rounded-3xl shadow-lg border border-slate-100 mb-10">
             <h3 className="text-lg font-black mb-4">
@@ -186,15 +239,18 @@ export const ConsultaTotais = () => {
               <ul className="divide-y">
                 {transacoesDaPessoa.map((t) => (
                   <li key={t.id} className="py-3 flex justify-between">
-                    <span className="font-semibold text-slate-600">
-                      {t.descricao}
-                    </span>
+                    <div className="flex flex-col">
+                    
+                      <span className="text-xs text-slate-400">
+                        {new Date(t.dataTransacao).toLocaleDateString("pt-BR")}
+                      </span>
+                      <span className="font-semibold text-slate-600">
+                        {t.descricao}
+                      </span>
+                    </div>
+
                     <span
-                      className={`font-bold ${
-                        t.tipo === "Receita" || t.tipo === 2
-                          ? "text-emerald-500"
-                          : "text-rose-500"
-                      }`}
+                      className={`font-bold ${t.tipo === "Receita" || t.tipo === 2 ? "text-emerald-500" : "text-rose-500"}`}
                     >
                       R$ {t.valor.toLocaleString("pt-BR")}
                     </span>
@@ -205,7 +261,7 @@ export const ConsultaTotais = () => {
           </section>
         )}
 
-        {/* Tabela de Totais */}
+   
         <section className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -236,7 +292,6 @@ export const ConsultaTotais = () => {
                 </tr>
               )}
 
-              {/* filtra por pessoa */}
               {totaisFiltrados.map((p) => (
                 <tr
                   key={p.id}
@@ -274,7 +329,7 @@ export const ConsultaTotais = () => {
               ))}
             </tbody>
 
-            {/* Rodapé com Totais Gerais */}
+           
             <tfoot>
               <tr className="bg-slate-900 text-white">
                 <td className="p-8 font-black text-lg italic">TOTAL GERAL</td>
@@ -301,7 +356,6 @@ export const ConsultaTotais = () => {
           </table>
         </section>
 
-       
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <div className="bg-emerald-500 p-6 rounded-3xl text-white shadow-lg shadow-emerald-200">
             <ArrowUpCircle className="mb-2 opacity-50" />

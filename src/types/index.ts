@@ -31,4 +31,5 @@ export interface Transacao {
     id: number;
     descricao: string;
   };
+  dataTransacao: string;
 }

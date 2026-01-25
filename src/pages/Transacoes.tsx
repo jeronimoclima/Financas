@@ -23,6 +23,7 @@ export const Transacoes = () => {
     tipo: "Despesa",
     idPessoa: "",
     idCategoria: "",
+    dataTransacao: new Date().toISOString().substring(0, 10), // yyyy-MM-dd
   });
 
   const pessoaAtual = pessoas.find((p) => p.id === Number(formData.idPessoa));
@@ -101,6 +102,7 @@ export const Transacoes = () => {
         tipo: "Despesa",
         idPessoa: "",
         idCategoria: "",
+        dataTransacao: new Date().toISOString().substring(0, 10),
       });
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
@@ -135,7 +137,7 @@ export const Transacoes = () => {
           className="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 space-y-8"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Pessoa */}
+           
             <div className="space-y-2">
               <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
                 Quem?
@@ -157,7 +159,7 @@ export const Transacoes = () => {
               </select>
             </div>
 
-            {/* Valor */}
+           
             <div className="space-y-2">
               <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
                 Valor?
@@ -180,7 +182,23 @@ export const Transacoes = () => {
               </div>
             </div>
 
-            {/* Tipo */}
+           
+            <div className="space-y-2">
+              <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                Data
+              </label>
+              <input
+                required
+                type="date"
+                value={formData.dataTransacao}
+                onChange={(e) =>
+                  setFormData({ ...formData, dataTransacao: e.target.value })
+                }
+                className="w-full p-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none transition-all font-bold"
+              />
+            </div>
+
+            
             <div className="md:col-span-2 space-y-2">
               <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
                 Tipo
@@ -213,7 +231,7 @@ export const Transacoes = () => {
               </div>
             </div>
 
-            {/* Descrição */}
+           
             <div className="space-y-2">
               <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
                 O que é?
@@ -229,7 +247,7 @@ export const Transacoes = () => {
               />
             </div>
 
-            {/* Categoria */}
+           
             <div className="space-y-2">
               <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
                 Categoria
