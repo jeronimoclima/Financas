@@ -3,7 +3,7 @@ Descrição
 
 Aplicação frontend para controle financeiro básico, permitindo o cadastro de pessoas, categorias e transações financeiras, além da visualização de totais.
 
-O sistema foi desenvolvido como projeto prático para estudo e consolidação de conceitos de React, TypeScript e integração com API, simulando um cenário real de controle financeiro doméstico.
+O sistema foi desenvolvido em React, TypeScript e integração com API, simulando um cenário real de controle financeiro doméstico.
 
 Funcionalidades
 
@@ -13,35 +13,29 @@ Cadastro de categorias financeiras
 
 Registro de transações (receitas e despesas)
 
-Consulta de totais financeiros com filtro por nome
+Consulta de totais financeiros com filtro por nome e data
 
 Navegação por sidebar
 
-Integração com API REST
+Integração com API REST em c# .Net
 
-Estrutura da Aplicação
+Estrutura da Aplicação:
 
 React + TypeScript
-
-Componentes reutilizáveis (Sidebar, FlashMessage, etc.)
-
-Páginas separadas por funcionalidade
 
 Serviço de API centralizado
 
 Controle de rotas
 
-Pré-requisitos
+Pré-requisitos:
 
 Antes de iniciar, é necessário ter instalado:
 
-Node.js
+Node.js e npm
 
 Git
 
-npm
-
-Como executar o projeto
+Como executar o projeto:
 
 Clonar o repositório:
 
@@ -61,8 +55,6 @@ npm install
 Executar a aplicação:
 
 npm run dev
-
-API
 
 Este frontend depende da API abaixo, que deve estar rodando simultaneamente:
 
